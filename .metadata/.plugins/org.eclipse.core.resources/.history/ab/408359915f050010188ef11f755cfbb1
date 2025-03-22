@@ -1,0 +1,10 @@
+package com.banking.User_Service.Service;
+
+import com.banking.User_Service.entity.User;
+
+public interface UserService {
+
+	void addRoles();
+	
+	User addUser(String role,User user) throws RoleNotFound;
+}

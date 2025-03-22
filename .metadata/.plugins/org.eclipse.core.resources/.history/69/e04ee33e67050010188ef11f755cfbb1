@@ -1,0 +1,5 @@
+package com.banking.User_Service.exception;
+
+public class UserNotFound {
+
+}

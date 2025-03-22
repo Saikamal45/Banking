@@ -1,0 +1,5 @@
+package com.banking.User_Service.entity.serviceImplementation;
+
+public class UserServiceImpl {
+
+}
