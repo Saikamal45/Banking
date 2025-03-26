@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService{
 		user.setRoles(roles);
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
-		user.setCreatedAt(LocalDateTime.now());
 		return userRepository.save(user);
 	}
 
@@ -68,7 +67,6 @@ public class UserServiceImpl implements UserService{
     updatedUser.setLastName(user.getLastName());
 	updatedUser.setPassword(user.getPassword());
 	updatedUser.setPhoneNumber(user.getPhoneNumber());
-	updatedUser.setCreatedAt(LocalDateTime.now());
 		return updatedUser;
 	}
 

@@ -39,7 +39,6 @@ public class User implements UserDetails{
 	private String email;
 	private String password;
 	private String phoneNumber;
-	private LocalDateTime createdAt;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL,CascadeType.REMOVE})
     @JoinTable(name="User_Roles", joinColumns = {@JoinColumn(name="User_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
