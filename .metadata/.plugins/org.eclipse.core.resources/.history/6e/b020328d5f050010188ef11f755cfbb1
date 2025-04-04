@@ -1,8 +1,0 @@
-package com.banking.User_Service.exception;
-
-public class RoleNotFound extends Throwable{
-
-	public RoleNotFound(String msg) {
-		super(msg);
-	}
-}

@@ -21,8 +21,8 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(InsufficentBalanceException.class)
-	public ResponseEntity<Map<String, Object>> handleInsufficientBalanceException(InsufficentBalanceException exception){
+	@ExceptionHandler(InsufficientBalanceException.class)
+	public ResponseEntity<Map<String, Object>> handleInsufficientBalanceException(InsufficientBalanceException exception){
 		Map<String, Object> res=new HashMap<String, Object>();
 		res.put("timeStamp", LocalDateTime.now());
 		res.put("message", exception.getMessage());

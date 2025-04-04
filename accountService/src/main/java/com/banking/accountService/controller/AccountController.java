@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.banking.accountService.entity.Account;
 import com.banking.accountService.exception.AccountNotFoundException;
-import com.banking.accountService.exception.InsufficentBalanceException;
+import com.banking.accountService.exception.InsufficientBalanceException;
 import com.banking.accountService.service.AccountService;
 
 @RestController
@@ -53,16 +53,12 @@ public class AccountController {
 		return new ResponseEntity<String>(deleteAccount,HttpStatus.OK);
 	}
 	
-	@PutMapping("/deposit")
-	public ResponseEntity<Account> depositAmount(@RequestParam int accountId,double amount)throws AccountNotFoundException{
-		Account depositAmount = accountService.depositAmount(accountId, amount);
-		return new ResponseEntity<Account>(depositAmount,HttpStatus.OK);
+	@PutMapping("/updateBalance")
+	public ResponseEntity<Account> updateBalance(@RequestParam int accountId,@RequestParam double amount, @RequestParam String transactionType)throws AccountNotFoundException{
+	Account updateBalance = accountService.updateBalance(accountId, amount, transactionType);
+	return new ResponseEntity<Account>(updateBalance,HttpStatus.OK);
 	}
 	
-	@PostMapping("/withdraw")
-	public ResponseEntity<Account> withdrawAmount(@RequestParam int accountId,double amount)throws AccountNotFoundException,InsufficentBalanceException{
-		Account withdrawAmount = accountService.withdrawAmount(accountId, amount);
-		return new ResponseEntity<Account>(withdrawAmount,HttpStatus.OK);
-	}
+
 }
 
