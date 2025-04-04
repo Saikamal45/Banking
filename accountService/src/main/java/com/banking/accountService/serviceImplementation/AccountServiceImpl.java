@@ -4,9 +4,13 @@ import java.time.LocalDate;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.banking.accountService.dto.UserDto;
 import com.banking.accountService.entity.Account;
 import com.banking.accountService.exception.AccountNotFoundException;
-import com.banking.accountService.exception.InsufficentBalanceException;
+import com.banking.accountService.exception.InsufficientBalanceException;
+import com.banking.accountService.feignClient.NotificationClient;
+import com.banking.accountService.feignClient.UserClient;
 import com.banking.accountService.repository.AccountRepository;
 import com.banking.accountService.service.AccountService;
 
@@ -15,10 +19,18 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private NotificationClient notificationClient;
+	
+	@Autowired
+	private UserClient userClient;
 
 	@Override
 	public Account createAccount(Account account) {
 		account.setCreatedAt(LocalDate.now());
+		UserDto userById = userClient.getUserById(account.getUserId());
+		notificationClient.accountCreationMail(userById.getEmail());
 		return accountRepository.save(account);
 		
 	}
@@ -63,32 +75,35 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public Account depositAmount(int accountId, double amount) throws AccountNotFoundException {
+	public Account updateBalance(int accountId, double amount, String transactionType) throws AccountNotFoundException {
 		if (amount <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be greater than zero.");
-        }
-		Account deposit = accountRepository.findById(accountId).
-		orElseThrow(()->new AccountNotFoundException("Account with Id :"+accountId+" is Not Found..."));
-		
-		deposit.setBalance(deposit.getBalance()+amount);
-		return accountRepository.save(deposit);
+          throw new IllegalArgumentException("Entered amount must be greater than zero.");
+      }
+		 Account account = accountRepository.findById(accountId).
+			orElseThrow(()->new AccountNotFoundException("Account with Id :"+accountId+" is Not Found..."));
+		 
+		 if("WITHDRAW".equalsIgnoreCase(transactionType)) {
+			 if(account.getBalance()<amount) {
+				 throw new IllegalArgumentException("Insufficient balance!");
+			 }
+			 account.setBalance(account.getBalance()-amount);
+		 }
+		 else if ("TRANSFER".equalsIgnoreCase(transactionType)) {
+			 if(account.getBalance()<amount) {
+				 throw new IllegalArgumentException("Insufficient balance!");
+			 }
+			 account.setBalance(account.getBalance()-amount);
+		}
+		 else if ("DEPOSIT".equalsIgnoreCase(transactionType)) {
+			account.setBalance(account.getBalance()+amount);
+		}
+		 else
+		 {
+			 throw new IllegalArgumentException("Invalid transaction type!");
+		 }
+		return accountRepository.save(account);
 	}
 
-	@Override
-	public Account withdrawAmount(int accountId, double amount) throws AccountNotFoundException, InsufficentBalanceException {
-		if (amount <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be greater than zero.");
-        }
-		
-		Account withDraw = accountRepository.findById(accountId).
-		orElseThrow(()->new AccountNotFoundException("Account with Id :"+accountId+" is Not Found..."));
-		
-		
-		if(amount>withDraw.getBalance()) {
-			throw new InsufficentBalanceException("Insufficient Balance.... Available Balance is :"+withDraw.getBalance());
-		}
-		withDraw.setBalance(withDraw.getBalance()-amount);
-		return accountRepository.save(withDraw);
-	}
+
 
 }

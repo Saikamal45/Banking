@@ -1,11 +1,14 @@
 package com.banking.User_Service.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,5 +58,12 @@ public class UserController {
 	public ResponseEntity<String> deleteProfile(@RequestParam int id) {
 	String deleteProfile = userService.deleteProfile(id);
 	return new ResponseEntity<String>(deleteProfile,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/getUserById/{id}")
+	public ResponseEntity<Optional<User>> getUserById(@PathVariable int id)throws UserNotFound{
+		Optional<User> userById = userService.getUserById(id);
+		return new ResponseEntity<Optional<User>>(userById,HttpStatus.OK);
 	}
 }

@@ -2,6 +2,9 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="F:\Banking\BankingBackend\notificationservice"/>
+			<item value="F:\Banking\BankingBackend\loanservice"/>
+			<item value="F:\Banking\BankingBackend\transactionService"/>
 			<item value="F:\Banking\BankingBackend\accountService"/>
 			<item value="F:\Banking\BankingBackend\Account-Service"/>
 			<item value="F:\Banking\BankingBackend\Service-Registry"/>

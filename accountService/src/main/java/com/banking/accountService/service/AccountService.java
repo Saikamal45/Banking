@@ -1,10 +1,8 @@
 package com.banking.accountService.service;
 
-
-
 import com.banking.accountService.entity.Account;
 import com.banking.accountService.exception.AccountNotFoundException;
-import com.banking.accountService.exception.InsufficentBalanceException;
+import com.banking.accountService.exception.InsufficientBalanceException;
 
 public interface AccountService {
 
@@ -18,7 +16,7 @@ public interface AccountService {
 	
 	double accountBalanace(int accountId) throws AccountNotFoundException;
 	
-	Account depositAmount(int accountId,double amount) throws AccountNotFoundException;
+	Account updateBalance(int accountId,double amount,String transactionType)throws AccountNotFoundException;
 	
-	Account withdrawAmount(int accountId,double amount) throws AccountNotFoundException, InsufficentBalanceException;
+
 }

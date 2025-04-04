@@ -1,19 +1,18 @@
 package com.banking.User_Service.entity.serviceImplementation;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.banking.User_Service.Service.UserService;
 import com.banking.User_Service.entity.Role;
 import com.banking.User_Service.entity.User;
 import com.banking.User_Service.exception.RoleNotFound;
 import com.banking.User_Service.exception.UserNotFound;
+import com.banking.User_Service.feignClient.NotificationClient;
 import com.banking.User_Service.repo.RoleRepository;
 import com.banking.User_Service.repo.UserRepository;
 
@@ -25,6 +24,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private NotificationClient notificationClient;
 	
 	private BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder(12);
 	@Override
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService{
 		user.setRoles(roles);
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
+		notificationClient.accountCreationMail(user.getEmail());
 		return userRepository.save(user);
 	}
 
@@ -77,6 +80,15 @@ public class UserServiceImpl implements UserService{
 	    }
 	    userRepository.deleteById(id);
 	    return "User Deleted Successfully...........";
+	}
+
+	@Override
+	public Optional<User> getUserById(int id) throws UserNotFound {
+		if (!userRepository.existsById(id)) {
+	        throw new RuntimeException("User with ID " + id + " not found");
+	    }
+		Optional<User> byId = userRepository.findById(id);
+		return byId;
 	}
 
 }

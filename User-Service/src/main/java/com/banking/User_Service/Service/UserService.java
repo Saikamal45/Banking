@@ -1,5 +1,6 @@
 package com.banking.User_Service.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.banking.User_Service.entity.User;
@@ -17,4 +18,6 @@ public interface UserService {
 	User updateProfile(int id,User user) throws UserNotFound;
 	
 	String deleteProfile(int id) ;
+	
+	Optional<User> getUserById(int id)throws UserNotFound;
 }

@@ -1,5 +1,0 @@
-package com.banking.User_Service.security;
-
-public class JwtFilter {
-
-}
